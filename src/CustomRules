@@ -1,0 +1,78 @@
+{
+    "common": {
+        "ip_cidr": [
+            {
+                "action": "add, remove",
+                "content": "10.0.0.0/24, test.com, .cn, test, ^stun\\..+",
+                "comment": "此项为示例，不启用",
+                "enable": 0,
+                "type": "direct, proxy, reject"
+            }
+        ],
+        "domain": [
+            {
+                "action": "add",
+                "content": "yinghe.xyz",
+                "comment": "硬核影视指南",
+                "enable": 1,
+                "type": "proxy"
+            }
+        ],
+        "domain_suffix": [],
+        "domain_keyword": [],
+        "domain_regex": []
+    },
+    "share": [
+        {
+            "action": "add",
+            "content": "",
+            "comment": "direct-list",
+            "enable": 1,
+            "type": "direct"
+        },
+        {
+            "action": "add",
+            "content": "",
+            "comment": "china-list",
+            "enable": 1,
+            "type": "direct"
+        },
+        {
+            "action": "add",
+            "content": "",
+            "comment": "apple-cn",
+            "enable": 1,
+            "type": "direct"
+        },
+        {
+            "action": "add",
+            "content": "",
+            "comment": "google-cn",
+            "enable": 1,
+            "type": "direct"
+        },
+        {
+            "action": "add",
+            "content": "",
+            "comment": "proxy-list",
+            "enable": 1,
+            "type": "proxy"
+        },
+        {
+            "action": "add",
+            "content": "",
+            "comment": "gfw",
+            "enable": 1,
+            "type": "proxy"
+        }
+    ],
+    "subscribe": [
+        {
+            "action": "add",
+            "content": "https://4.feiniaoyun01.life/api/v1/client/subscribe?token=cda5c2e1479dd243957d7a9854810bc0",
+            "comment": "飞鸟云 - 1",
+            "enable": 1,
+            "type": "direct"
+        }
+    ]
+}

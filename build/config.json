@@ -1,0 +1,197 @@
+{
+  "log": {
+    "disabled": false,
+    "level": "info",
+    "timestamp": true
+  },
+  "dns": {
+    "servers": [
+      {
+        "tag": "GoogleDNS",
+        "address": "tls://8.8.8.8",
+        "address_resolver": "8.8.8.8",
+        "address_strategy": "",
+        "strategy": "",
+        "detour": "GLOBAL",
+        "client_subnet": "202.103.44.150"
+      },
+      {
+        "tag": "LocalDNS",
+        "address": "https://223.5.5.5/dns-query",
+        "address_resolver": "223.5.5.5",
+        "address_strategy": "",
+        "strategy": "",
+        "detour": "DIRECT",
+        "client_subnet": ""
+      }
+    ],
+    "rules": [
+      {
+        "clash_mode": "Direct",
+        "server": "LocalDNS"
+      },
+      {
+        "clash_mode": "Global",
+        "server": "GoogleDNS"
+      },
+      {
+        "rule_set": "DirectRules",
+        "server": "LocalDNS"
+      }
+    ],
+    "final": "GoogleDNS",
+    "strategy": "ipv4_only",
+    "disable_cache": false,
+    "disable_expire": false,
+    "independent_cache": false,
+    "reverse_mapping": false,
+    "client_subnet": "",
+    "fakeip": {
+      "enabled": false,
+      "inet4_range": "198.18.0.0/15",
+      "inet6_range": "fc00::/18"
+    }
+  },
+  "inbounds": [
+    {
+      "type": "mixed",
+      "tag": "mixed-in",
+      "listen": "127.0.0.1",
+      "listen_port": 20122,
+      "tcp_fast_open": false,
+      "tcp_multi_path": false,
+      "udp_fragment": false,
+      "udp_timeout": "5m",
+      "detour": "",
+      "sniff": true,
+      "sniff_override_destination": false,
+      "sniff_timeout": "300ms",
+      "domain_strategy": "ipv4_only",
+      "udp_disable_domain_unmapping": false,
+      "set_system_proxy": true
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "direct",
+      "tag": "DIRECT"
+    },
+    {
+      "type": "block",
+      "tag": "REJECT"
+    },
+    {
+      "type": "selector",
+      "tag": "手动选择",
+      "outbounds": [
+        "DIRECT",
+        "REJECT",
+        "自动选择"
+      ],
+      "default": "自动选择",
+      "interrupt_exist_connections": false
+    },
+    {
+      "type": "urltest",
+      "tag": "自动选择",
+      "outbounds": [],
+      "url": "https://www.gstatic.com/generate_204",
+      "interval": "300s",
+      "tolerance": 150,
+      "idle_timeout": "",
+      "interrupt_exist_connections": false
+    },
+    {
+      "type": "selector",
+      "tag": "GLOBAL",
+      "outbounds": [
+        "自动选择"
+      ]
+    },
+    {
+      "type": "dns",
+      "tag": "DNS"
+    }
+  ],
+  "route": {
+    "rules": [
+      {
+        "clash_mode": "Direct",
+        "outbound": "DIRECT"
+      },
+      {
+        "clash_mode": "Global",
+        "outbound": "GLOBAL"
+      },
+      {
+        "rule_set": "DirectRules",
+        "outbound": "DIRECT"
+      },
+      {
+        "rule_set": "ProxyRules",
+        "outbound": "手动选择"
+      },
+      {
+        "rule_set": "RejectRules",
+        "outbound": "REJECT"
+      },
+      {
+        "ip_is_private": true,
+        "outbound": "DIRECT"
+      },
+      {
+        "protocol": "dns",
+        "port": 53,
+        "outbound": "DNS"
+      },
+      {
+        "network": "udp",
+        "port": 443,
+        "outbound": "REJECT"
+      }
+    ],
+    "rule_set": [
+      {
+        "type": "local",
+        "tag": "DirectRules",
+        "format": "binary",
+        "path": "DirectRules"
+      },
+      {
+        "type": "local",
+        "tag": "ProxyRules",
+        "format": "binary",
+        "path": "ProxyRules"
+      },
+      {
+        "type": "local",
+        "tag": "RejectRules",
+        "format": "binary",
+        "path": "RejectRules"
+      }
+    ],
+    "final": "",
+    "auto_detect_interface": true,
+    "override_android_vpn": false
+  },
+  "experimental": {
+    "cache_file": {
+      "enabled": true,
+      "path": "",
+      "cache_id": "",
+      "store_fakeip": false,
+      "store_rdrc": false,
+      "rdrc_timeout": ""
+    },
+    "clash_api": {
+      "external_controller": "127.0.0.1:9090",
+      "external_ui": "",
+      "external_ui_download_url": "",
+      "external_ui_download_detour": "",
+      "secret": "",
+      "default_mode": "",
+      "access_control_allow_origin": [],
+      "access_control_allow_private_network": false
+    }
+  }
+}
