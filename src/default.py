@@ -1,9 +1,13 @@
-{
+# @version: 1.12.0
+# @author: cheremace
+
+config = {
+# 配置文件参考资料 https://sing-box.sagernet.org/zh/configuration/
   "log": {
-    "disabled": false,
+    "disabled": False,
     "level": "debug",
     "output": "",
-    "timestamp": false
+    "timestamp": False
   },
   "experimental": {
     "clash_api": {
@@ -16,14 +20,14 @@
       "access_control_allow_origin": [
         "*"
       ],
-      "access_control_allow_private_network": false
+      "access_control_allow_private_network": False
     },
     "cache_file": {
-      "enabled": true,
+      "enabled": True,
       "path": "cache.db",
       "cache_id": "",
-      "store_fakeip": true,
-      "store_rdrc": true,
+      "store_fakeip": True,
+      "store_rdrc": True,
       "rdrc_timeout": "7d"
     }
   },
@@ -33,9 +37,9 @@
       "tag": "mixed-in",
       "listen": "127.0.0.1",
       "listen_port": 20122,
-      "tcp_fast_open": false,
-      "tcp_multi_path": false,
-      "udp_fragment": false
+      "tcp_fast_open": False,
+      "tcp_multi_path": False,
+      "udp_fragment": False
     },
     {
       "type": "tun",
@@ -46,9 +50,9 @@
         "fdfe:dcba:9876::1/126"
       ],
       "mtu": 9000,
-      "auto_route": true,
-      "strict_route": true,
-      "endpoint_independent_nat": false,
+      "auto_route": True,
+      "strict_route": True,
+      "endpoint_independent_nat": False,
       "stack": "mixed"
     }
   ],
@@ -56,7 +60,7 @@
     {
       "type": "selector",
       "tag": "🚀 节点选择",
-      "interrupt_exist_connections": true,
+      "interrupt_exist_connections": True,
       "outbounds": [
         "🎈 自动选择",
         "🇪🇸 西班牙 01",
@@ -123,7 +127,7 @@
       "url": "https://www.gstatic.com/generate_204",
       "interval": "3m",
       "tolerance": 150,
-      "interrupt_exist_connections": true,
+      "interrupt_exist_connections": True,
       "outbounds": [
         "🇪🇸 西班牙 01",
         "🇬🇧 英国 01",
@@ -190,7 +194,7 @@
     {
       "type": "selector",
       "tag": "🐟 漏网之鱼",
-      "interrupt_exist_connections": true,
+      "interrupt_exist_connections": True,
       "outbounds": [
         "🚀 节点选择",
         "🎯 全球直连"
@@ -199,7 +203,7 @@
     {
       "type": "selector",
       "tag": "GLOBAL",
-      "interrupt_exist_connections": true,
+      "interrupt_exist_connections": True,
       "outbounds": [
         "🚀 节点选择",
         "🎈 自动选择",
@@ -252,7 +256,7 @@
         "headers": {
           "Host": "tqt-hk02-dl.51feitu.com"
         },
-        "max_early_data": null,
+        "max_early_data": None,
         "path": "/"
       }
     },
@@ -277,7 +281,7 @@
         "headers": {
           "Host": "tqt-hk04-dl.51feitu.com"
         },
-        "max_early_data": null,
+        "max_early_data": None,
         "path": "/"
       }
     },
@@ -302,7 +306,7 @@
         "headers": {
           "Host": "tqt-hk-vip-dl.51feitu.com"
         },
-        "max_early_data": null,
+        "max_early_data": None,
         "path": "/"
       }
     },
@@ -327,7 +331,7 @@
         "headers": {
           "Host": "tqt-hk-vip-dl.51feitu.com"
         },
-        "max_early_data": null,
+        "max_early_data": None,
         "path": "/"
       }
     },
@@ -352,7 +356,7 @@
         "headers": {
           "Host": "tqt-hk-vip-dl.51feitu.com"
         },
-        "max_early_data": null,
+        "max_early_data": None,
         "path": "/"
       }
     },
@@ -377,7 +381,7 @@
         "headers": {
           "Host": "tqt-hk12-dl.51feitu.com"
         },
-        "max_early_data": null,
+        "max_early_data": None,
         "path": "/"
       }
     },
@@ -402,7 +406,7 @@
         "headers": {
           "Host": "tqt-hk14-dl.51feitu.com"
         },
-        "max_early_data": null,
+        "max_early_data": None,
         "path": "/"
       }
     },
@@ -435,7 +439,7 @@
         "headers": {
           "Host": "tqt-jp02-dl.51feitu.com"
         },
-        "max_early_data": null,
+        "max_early_data": None,
         "path": "/"
       }
     },
@@ -460,7 +464,7 @@
         "headers": {
           "Host": "tqt-jp02-dl.51feitu.com"
         },
-        "max_early_data": null,
+        "max_early_data": None,
         "path": "/"
       }
     },
@@ -485,7 +489,7 @@
         "headers": {
           "Host": "tqt-jp-vip-dl.51feitu.com"
         },
-        "max_early_data": null,
+        "max_early_data": None,
         "path": "/"
       }
     },
@@ -510,7 +514,7 @@
         "headers": {
           "Host": "tqt-jp-vip-dl.51feitu.com"
         },
-        "max_early_data": null,
+        "max_early_data": None,
         "path": "/"
       }
     },
@@ -535,7 +539,7 @@
         "headers": {
           "Host": "tqt-jp-vip-dl.51feitu.com"
         },
-        "max_early_data": null,
+        "max_early_data": None,
         "path": "/"
       }
     },
@@ -576,7 +580,7 @@
         "headers": {
           "Host": "tqt-sg02-dl.51feitu.com"
         },
-        "max_early_data": null,
+        "max_early_data": None,
         "path": "/"
       }
     },
@@ -601,7 +605,7 @@
         "headers": {
           "Host": "tqt-sg04-dl.51feitu.com"
         },
-        "max_early_data": null,
+        "max_early_data": None,
         "path": "/"
       }
     },
@@ -626,7 +630,7 @@
         "headers": {
           "Host": "tqt-sg-vip-dl.51feitu.com"
         },
-        "max_early_data": null,
+        "max_early_data": None,
         "path": "/"
       }
     },
@@ -651,7 +655,7 @@
         "headers": {
           "Host": "tqt-sg-vip-dl.51feitu.com"
         },
-        "max_early_data": null,
+        "max_early_data": None,
         "path": "/"
       }
     },
@@ -676,7 +680,7 @@
         "headers": {
           "Host": "tqt-sg-vip-dl.51feitu.com"
         },
-        "max_early_data": null,
+        "max_early_data": None,
         "path": "/"
       }
     },
@@ -749,7 +753,7 @@
         "headers": {
           "Host": "tqt-us02-dl.51feitu.com"
         },
-        "max_early_data": null,
+        "max_early_data": None,
         "path": "/"
       }
     },
@@ -774,7 +778,7 @@
         "headers": {
           "Host": "tqt-us04-dl.51feitu.com"
         },
-        "max_early_data": null,
+        "max_early_data": None,
         "path": "/"
       }
     },
@@ -975,7 +979,7 @@
         "download_detour": "🎯 全球直连"
       }
     ],
-    "auto_detect_interface": true,
+    "auto_detect_interface": True,
     "final": "🐟 漏网之鱼"
   },
   "dns": {
@@ -1035,13 +1039,14 @@
       }
     ],
     "fakeip": {
-      "enabled": false,
+      "enabled": False,
       "inet4_range": "198.18.0.0/15",
       "inet6_range": "fc00::/18"
     },
-    "disable_cache": false,
-    "disable_expire": false,
-    "independent_cache": false,
+    "disable_cache": False,
+    "disable_expire": False,
+    "independent_cache": False,
     "final": "Remote-DNS"
   }
+
 }

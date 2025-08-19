@@ -1,0 +1,7 @@
+reject:
+  - domain, genuine.adobe.com  # adobe
+proxy:
+  - domain_keyword, browserleaks
+  - domain, yinghe.xyz  # 硬核影视指南
+direct:
+  # - domain, genuine.adobe.com
