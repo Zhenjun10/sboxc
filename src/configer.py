@@ -1,6 +1,4 @@
-import json
-import yaml
-from converter import Converter
+from tools import *
 
 
 class Configer:
@@ -9,15 +7,8 @@ class Configer:
         self.config = config
 
     def get_nodes_from_str(self, string):
-        convert = Converter().parse_nodes(string)
-        return convert
-    
-    def get_nodes_from_url(self, url):
-        convert = Converter(url)
-        return convert.nodes
-
-    def add_node(self):
-        ...
+        nodes = parse_nodes(string)
+        return nodes
 
     def save_config(self, filename = None):
         '''保存`config`文件
@@ -31,6 +22,6 @@ class Configer:
 
 
 if __name__ == "__main__":
-    config = Configer()
+    cfg = Configer()
     # config.save_config()
-    print(config.config["outbounds"])
+    print(cfg.config["outbounds"])
