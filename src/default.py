@@ -5,16 +5,16 @@ config = {
 # 配置文件参考资料 https://sing-box.sagernet.org/zh/configuration/
   "log": {
     "disabled": False,
-    "level": "debug",
+    "level": "info",
     "output": "",
-    "timestamp": False
+    "timestamp": True
   },
   "experimental": {
     "clash_api": {
       "external_controller": "127.0.0.1:20123",
       "external_ui": "",
       "external_ui_download_url": "",
-      "external_ui_download_detour": "🎯 全球直连",
+      "external_ui_download_detour": "DIRECT",
       "secret": "ID_7oqrfbpd",
       "default_mode": "rule",
       "access_control_allow_origin": [
@@ -36,7 +36,7 @@ config = {
       "type": "mixed",
       "tag": "mixed-in",
       "listen": "127.0.0.1",
-      "listen_port": 21764,
+      "listen_port": 20122,
       "tcp_fast_open": False,
       "tcp_multi_path": False,
       "udp_fragment": False
@@ -46,7 +46,7 @@ config = {
       "tag": "tun-in",
       "interface_name": "",
       "address": [
-        "10.0.1.1/30"
+        "192.168.255.252/30"
       ],
       "mtu": 9000,
       "auto_route": True,
@@ -76,7 +76,16 @@ config = {
     {
       "type": "direct",
       "tag": "DIRECT"
-    }
+    },
+    {
+      "type": "selector",
+      "tag": "GLOBAL",
+      "interrupt_exist_connections": True,
+      "outbounds": [
+        "自动选择",
+        "手动选择"
+      ]
+    },
   ],
   "route": {
     "rules": [
@@ -88,16 +97,16 @@ config = {
         "action": "hijack-dns",
         "protocol": "dns"
       },
-      # {
-      #   "action": "route",
-      #   "clash_mode": "direct",
-      #   "outbound": "DIRECT"
-      # },
-      # {
-      #   "action": "route",
-      #   "clash_mode": "global",
-      #   "outbound": "GLOBAL"
-      # },
+      {
+        "action": "route",
+        "clash_mode": "direct",
+        "outbound": "DIRECT"
+      },
+      {
+        "action": "route",
+        "clash_mode": "global",
+        "outbound": "GLOBAL"
+      },
       {
         "action": "reject",
         "protocol": "quic"
@@ -189,69 +198,65 @@ config = {
       }
     ],
     "auto_detect_interface": True,
-    "final": "手动选择"
+    "final": "手动选择",
+    "default_domain_resolver": {
+      "server": "Local-DNS"
+    }
   },
   "dns": {
     "servers": [
       {
         "tag": "Local-DNS",
-        "address": "https://223.5.5.5/dns-query",
-        "address_resolver": "Local-DNS-Resolver",
-        "detour": "DIRECT"
+        "type": "https",
+        "domain_resolver": "Local-DNS-Resolver",
+        "server": "223.5.5.5",
+        "path": "/dns-query"
       },
       {
         "tag": "Local-DNS-Resolver",
-        "address": "223.5.5.5",
-        "detour": "DIRECT"
+        "type": "udp",
+        "server": "223.5.5.5"
       },
       {
         "tag": "Remote-DNS",
-        "address": "tls://8.8.8.8",
-        "address_resolver": "Remote-DNS-Resolver",
-        "detour": "手动选择"
+        "type": "tls",
+        "detour": "手动选择",
+        "domain_resolver": "Remote-DNS-Resolver",
+        "server": "8.8.8.8"
       },
       {
         "tag": "Remote-DNS-Resolver",
-        "address": "8.8.8.8",
-        "detour": "手动选择"
+        "type": "udp",
+        "detour": "手动选择",
+        "server": "8.8.8.8"
       }
     ],
     "rules": [
       {
         "action": "route",
-        "server": "Local-DNS",
-        "outbound": "any"
+        "clash_mode": "direct",
+        "server": "Local-DNS"
       },
       {
         "action": "route",
-        "server": "Local-DNS",
-        "clash_mode": "direct"
+        "clash_mode": "global",
+        "server": "Remote-DNS"
       },
       {
         "action": "route",
-        "server": "Remote-DNS",
-        "clash_mode": "global"
-      },
-      {
-        "action": "route",
-        "server": "Local-DNS",
         "rule_set": [
           "GeoSite-CN"
-        ]
+        ],
+        "server": "Local-DNS"
       },
       {
         "action": "route",
-        "server": "Remote-DNS",
         "rule_set": [
           "GeoLocation-!CN"
-        ]
+        ],
+        "server": "Remote-DNS"
       }
     ],
-    "fakeip": {
-      "enabled": False,
-      "inet4_range": "198.18.0.0/15",
-      "inet6_range": "fc00::/18"
-    },
     "disable_cache": False,
     "disable_expire": False,
     "independent_cache": False,

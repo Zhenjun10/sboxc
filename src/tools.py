@@ -28,8 +28,8 @@ def get_nodes(url: str):
     return stream
 
 
-def parse_nodes(stream: str):
-    nodes = []
+def parse_nodes(nodes, stream: str, filter = None):
+    tags = []
     raws = b64decode(stream).split()
     for node in raws:
         type, content = parse.unquote(node).split('://')
@@ -55,14 +55,9 @@ def parse_nodes(stream: str):
                 "security": "auto",
                 "alter_id": int(content["aid"])
             }
+        tags.append(result["tag"])
         nodes.append(result)
-    return nodes
-
-
-def get_rules(filename: str):
-    with open(filename, mode='r', encoding='utf-8') as f:
-        stream = f.read()
-    return stream
+    return tags
 
 
 def format_rules(obj, contents):
@@ -74,9 +69,8 @@ def format_rules(obj, contents):
             obj[type].append(item)
 
 
-def parse_rules(stream: str):
+def parse_rules(rules, stream: str):
     contents = yaml.safe_load(stream)
-    rules = []
     for k, v in contents.items():
         if k == 'reject':
             rule = {"action": "reject"}
@@ -87,5 +81,4 @@ def parse_rules(stream: str):
         elif k == 'direct':
             rule = {"action": "route", "outbound": "DIRECT"}
             format_rules(rule, v)
-        rules.append(rule)
-    return rules
+        rules.insert(0, rule)

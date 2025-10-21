@@ -1,6 +1,7 @@
 # .gitignore
 __pycache__
 .venv
+build
 ref
 data
 test
