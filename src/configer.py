@@ -22,6 +22,7 @@ class Configer:
         @return: 无
         '''
         json.dump(self.config, open(filename, "w+", encoding="utf-8"), indent=2, ensure_ascii=False)
+        print("保存完成！")
 
     @property
     def inbounds(self):

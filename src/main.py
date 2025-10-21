@@ -1,8 +1,9 @@
 from configer import Configer
 
 
-SUB_URL = ''
+with open('data/SUB_URL', 'r', encoding='utf-8') as f:
+    url = f.read()
 
-cfg = Configer(SUB_URL)
+cfg = Configer(url)
 cfg.inbounds.pop()
 cfg.save_config()
