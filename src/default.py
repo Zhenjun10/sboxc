@@ -11,9 +11,9 @@ config = {
   },
   "experimental": {
     "clash_api": {
-      "external_controller": "127.0.0.1:20123",
-      "external_ui": "",
-      "external_ui_download_url": "",
+      "external_controller": "127.0.0.1:20123",  # 访问 127.0.0.1:20123/ui
+      "external_ui": "./ui",
+      "external_ui_download_url": "",  # git clone https://github.com/metacubex/metacubexd.git -b gh-pages ui
       "external_ui_download_detour": "DIRECT",
       "secret": "ID_7oqrfbpd",
       "default_mode": "rule",
@@ -32,15 +32,15 @@ config = {
     }
   },
   "inbounds": [
-    {
-      "type": "mixed",
-      "tag": "mixed-in",
-      "listen": "127.0.0.1",
-      "listen_port": 20122,
-      "tcp_fast_open": False,
-      "tcp_multi_path": False,
-      "udp_fragment": False
-    },
+    # {
+    #   "type": "mixed",
+    #   "tag": "mixed-in",
+    #   "listen": "127.0.0.1",
+    #   "listen_port": 20122,
+    #   "tcp_fast_open": False,
+    #   "tcp_multi_path": False,
+    #   "udp_fragment": False
+    # },
     {
       "type": "tun",
       "tag": "tun-in",
@@ -52,7 +52,14 @@ config = {
       "auto_route": True,
       "strict_route": True,
       "endpoint_independent_nat": False,
-      "stack": "mixed"
+      "stack": "mixed",
+      "platform": {
+        "http_proxy": {
+          "enabled": True,
+          "server": "127.0.0.1",
+          "server_port": 20122
+        }
+      }
     }
   ],
   "outbounds": [
@@ -114,43 +121,28 @@ config = {
       {
         "action": "reject",
         "rule_set": [
-          "Category-Ads"
+          "Category-Ads",
+          "Reject"
         ]
       },
       {
         "action": "route",
+        "outbound": "DIRECT",
         "rule_set": [
-          "GeoSite-Private"
-        ],
-        "outbound": "DIRECT"
+          "GeoSite-Private",
+          "GeoSite-CN",
+          "GeoIP-Private",
+          "GeoIP-CN",
+          "Direct"
+        ]
       },
       {
         "action": "route",
+        "outbound": "手动选择",
         "rule_set": [
-          "GeoSite-CN"
-        ],
-        "outbound": "DIRECT"
-      },
-      {
-        "action": "route",
-        "rule_set": [
-          "GeoIP-Private"
-        ],
-        "outbound": "DIRECT"
-      },
-      {
-        "action": "route",
-        "rule_set": [
-          "GeoIP-CN"
-        ],
-        "outbound": "DIRECT"
-      },
-      {
-        "action": "route",
-        "rule_set": [
-          "GeoLocation-!CN"
-        ],
-        "outbound": "手动选择"
+          "GeoLocation-!CN",
+          "Proxy"
+        ]
       }
     ],
     "rule_set": [
@@ -199,8 +191,11 @@ config = {
     ],
     "auto_detect_interface": True,
     "final": "手动选择",
-    "default_domain_resolver": {
-      "server": "Local-DNS"
+    "default_domain_resolver": {  # 解析 节点 域名策略, 可以被 outbound.domain_resolver 覆盖
+      "server": "Local-DNS",
+      "strategy": "ipv4_only",  # 解决 empty result (cached) 错误 #3461
+      "rewrite_ttl": 60,
+      # "client_subnet": "1.1.1.1"
     }
   },
   "dns": {
@@ -245,21 +240,25 @@ config = {
       {
         "action": "route",
         "rule_set": [
-          "GeoSite-CN"
+          "GeoSite-CN",
+          "Direct"
         ],
         "server": "Local-DNS"
       },
       {
         "action": "route",
         "rule_set": [
-          "GeoLocation-!CN"
+          "GeoLocation-!CN",
+          "Proxy"
         ],
         "server": "Remote-DNS"
       }
     ],
+    "final": "Remote-DNS",
+    "strategy": "ipv4_only",  # 解析 所有 域名策略
     "disable_cache": False,
     "disable_expire": False,
     "independent_cache": False,
-    "final": "Remote-DNS"
+    "client_subnet": "1.1.1.1"
   }
 }

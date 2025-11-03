@@ -41,20 +41,10 @@ class Configer:
         return self.config["outbounds"][1]["outbounds"]
     
     @property
-    def rules(self):
-        return self.config["route"]["rules"]
+    def rule_set(self):
+        return self.config["route"]["rule_set"]
     
     def set_rules(self):
         with open('src/CustomRules.yml', mode='r', encoding='utf-8') as f:
             stream = f.read()
-        tools.parse_rules(self.rules, stream)
-
-
-if __name__ == "__main__":
-    cfg = Configer("https://tqt-pwezahrw.tutunode.com/gateway/taoqitu?token=4bbabf8f4ca677564b30ef93778164d9")
-    # tools.pretty_print(cfg.manaul)
-    # tools.pretty_print(cfg.auto)
-    # tools.pretty_print(cfg.outbounds)
-    # tools.pretty_print(cfg.rules)
-    cfg.inbounds.pop()
-    cfg.save_config()
+        tools.parse_rules(self.rule_set, stream)

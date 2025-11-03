@@ -69,16 +69,17 @@ def format_rules(obj, contents):
             obj[type].append(item)
 
 
-def parse_rules(rules, stream: str):
+def parse_rules(rule_sets, stream: str):
     contents = yaml.safe_load(stream)
     for k, v in contents.items():
+        rule_set = {"tag": "", "type": "inline", "rules": [{}]}
         if k == 'reject':
-            rule = {"action": "reject"}
-            format_rules(rule, v)
+            rule_set["tag"] = "Reject"
+            format_rules(rule_set["rules"][0], v)
         elif k == 'proxy':
-            rule = {"action": "route", "outbound": "手动选择"}
-            format_rules(rule, v)
+            rule_set["tag"] = "Proxy"
+            format_rules(rule_set["rules"][0], v)
         elif k == 'direct':
-            rule = {"action": "route", "outbound": "DIRECT"}
-            format_rules(rule, v)
-        rules.insert(0, rule)
+            rule_set["tag"] = "Direct"
+            format_rules(rule_set["rules"][0], v)
+        rule_sets.append(rule_set)
