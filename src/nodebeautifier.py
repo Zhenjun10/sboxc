@@ -1,0 +1,92 @@
+# beautify_nodes.py
+import re
+
+# ====== 区域关键字 ======
+REGIONS = [
+    {"keywords": ["流量", "套餐到期", "重置", "剩余"], "zh": "信息"},
+    {"keywords": ["HK", "Hong Kong", "香港"], "zh": "香港"},
+    {"keywords": ["JP", "Japan", "日本", "Tokyo", "Osaka"], "zh": "日本"},
+    {"keywords": ["SG", "Singapore", "新加坡"], "zh": "新加坡"},
+    {"keywords": ["TW", "Taiwan", "台湾", "Taipei"], "zh": "台湾"},
+    {"keywords": ["US", "USA", "United States", "美国", "Los Angeles"], "zh": "美国"},
+    {"keywords": ["KR", "Korea", "韩国", "Seoul"], "zh": "韩国"},
+    {"keywords": ["CN", "China", "中国", "大陆"], "zh": "中国"},
+    {"keywords": ["GB", "England", "英国", "UK", "United Kingdom", "Britain"], "zh": "英国"},
+    {"keywords": ["ES", "Spain", "西班牙"], "zh": "西班牙"},
+    {"keywords": ["MY", "Malaysia", "马来西亚", "马来", "馬來", "MALAYSIA", "KualaLumpur"], "zh": "马来西亚"},
+    {"keywords": ["CN", "Turkey", "土耳其", "TUR"], "zh": "土耳其"},
+]
+
+# ====== 节点美化类 ======
+class NodeBeautifier:
+    def __init__(self, regions=REGIONS):
+        self.regions = regions
+        self.counts = {}  # 每个地区编号计数
+
+    def _find_region(self, name: str):
+        name_lower = name.lower()
+        for region in self.regions:
+            for kw in region["keywords"]:
+                if kw.lower() in name_lower:
+                    return region
+        return None
+
+    def _detect_line_type(self, name: str) -> str:
+        name_upper = name.upper()
+        if "BGP" in name_upper:
+            return "BGP"
+        elif "IEPL" in name_upper:
+            return "IEPL"
+        elif "三网" in name_upper:
+            return "三网"
+        else:
+            return ""  # 无线路类型则返回空
+
+    def _detect_multiplier(self, name: str) -> str:
+        # 匹配倍率：x2, ×3, x3.5, X1.2等
+        match = re.search(r'[x×X](\d+(?:\.\d+)?)', name)
+        if match:
+            return f"x{match.group(1)}"
+        else:
+            return "x1"  # 默认倍率
+
+    def beautify(self, node_name: str, subscription_name: str = '') -> str:
+        region = self._find_region(node_name)
+
+        if not region:
+            return f"{subscription_name} | {node_name}".strip(" |")
+        elif region["zh"] == '信息':
+            return None
+
+        line_type = self._detect_line_type(node_name)
+        multiplier = self._detect_multiplier(node_name)
+        region_name = region["zh"]
+        self.counts[region_name] = self.counts.get(region_name, 0) + 1
+        idx = f"{self.counts[region_name]:02d}"
+
+        # 拼接右侧部分
+        right_part = f"{line_type}{multiplier}" if line_type else multiplier
+        return f"{subscription_name} | {region_name} {idx} | {right_part}".strip(" |")
+
+# ====== 模块级实例 ======
+_beautifier = NodeBeautifier()
+
+def beautify_nodes(node_name: str, subscription_name: str = '') -> str:
+    """每次传入一个节点名与订阅名，返回美化后的节点名称"""
+    return _beautifier.beautify(node_name, subscription_name)
+
+# ====== 示例 ======
+if __name__ == "__main__":
+    samples = [
+        "🇭🇰HKBN_IEPL_01_x2",
+        "Japan_Tokyo_BGP01",
+        "SG_×3",
+        "KR_x1.5",
+        "US_LosAngeles",
+        "CN-Beijing-x4",
+        "Unknown_Node",
+        "ddddd"
+    ]
+
+    for s in samples:
+        print(beautify_nodes(s, "A"))

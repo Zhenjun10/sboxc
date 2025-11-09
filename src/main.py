@@ -1,9 +1,9 @@
 from configer import Configer
 
 
-with open('data/SUB_URL', 'r', encoding='utf-8') as f:
-    url = f.read()
+with open('data/tao.yml', 'r', encoding='utf-8') as f:
+    param = f.read()
 
-cfg = Configer(url)
+cfg = Configer(param, "stream")
 # cfg.inbounds.pop()
 cfg.save_config()

@@ -3,11 +3,13 @@ import json
 import re
 import yaml
 from urllib import request, parse
+from nodebeautifier import beautify_nodes
 
 
 nodes_re = {
     "ss": re.compile(r'^(\w+)@(.*?):(\d+)#(.*?)$')
 }
+node_addrs = []
 
 
 def b64decode(string: str):
@@ -28,35 +30,57 @@ def get_nodes(url: str):
     return stream
 
 
-def parse_nodes(nodes, stream: str, filter = None):
+def parse_ss(nodes, content):
+    content = nodes_re['ss'].search(content).groups()
+    addr = content[1] + content[2]
+    tag = beautify_nodes(content[3])
+    if addr not in node_addrs and tag is not None:
+        node_addrs.append(addr)
+        method, password = b64decode(content[0]).split(":")
+        nodes.append({
+            "tag": tag,
+            "type": "shadowsocks",
+            "server": content[1],
+            "server_port": int(content[2]),
+            "method": method,
+            "password": password
+        })
+    else:
+        tag = None
+    return tag
+
+
+def parse_vmess(nodes, content):
+    content = json.loads(b64decode(content))
+    addr = content["add"] + content["port"]
+    tag = beautify_nodes(content["ps"])
+    if addr not in node_addrs and tag is not None:
+        node_addrs.append(addr)
+        nodes.append({
+            "tag": tag,
+            "type": "vmess",
+            "server": content["add"],
+            "server_port": int(content["port"]),
+            "uuid": content["id"],
+            "security": "auto",
+            "alter_id": int(content["aid"])
+        })
+    else:
+        tag = None
+    return tag
+
+
+def parse_nodes(nodes, stream: str):
     tags = []
     raws = b64decode(stream).split()
     for node in raws:
-        type, content = parse.unquote(node).split('://')
-        if type == 'ss':
-            content = nodes_re['ss'].search(content).groups() # type: ignore
-            method, password = b64decode(content[0]).split(":")
-            result = {
-                "tag": content[3],
-                "type": "shadowsocks",
-                "server": content[1],
-                "server_port": int(content[2]),
-                "method": method,
-                "password": password
-            }
-        elif type == 'vmess':
-            content = json.loads(b64decode(content))
-            result = {
-                "tag": content["ps"],
-                "type": "vmess",
-                "server": content["add"],
-                "server_port": int(content["port"]),
-                "uuid": content["id"],
-                "security": "auto",
-                "alter_id": int(content["aid"])
-            }
-        tags.append(result["tag"])
-        nodes.append(result)
+        flag, content = parse.unquote(node).split('://')
+        if flag == 'ss':
+            tag = parse_ss(nodes, content)
+        elif flag == 'vmess':
+            tag = parse_vmess(nodes, content)
+        if tag is not None:
+            tags.append(tag)
     return tags
 
 
