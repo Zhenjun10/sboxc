@@ -1,7 +1,7 @@
 from configer import Configer
 
 
-with open('data/tao.yml', 'r', encoding='utf-8') as f:
+with open('data/subscribe', 'r', encoding='utf-8') as f:
     param = f.read()
 
 cfg = Configer(param, "stream")

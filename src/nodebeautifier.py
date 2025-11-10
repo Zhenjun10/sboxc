@@ -39,6 +39,8 @@ class NodeBeautifier:
             return "IEPL"
         elif "三网" in name_upper:
             return "三网"
+        elif "Home" in name_upper:
+            return "Home"
         else:
             return ""  # 无线路类型则返回空
 

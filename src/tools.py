@@ -79,6 +79,9 @@ def parse_nodes(nodes, stream: str):
             tag = parse_ss(nodes, content)
         elif flag == 'vmess':
             tag = parse_vmess(nodes, content)
+        else:
+            print("未解析的协议:", flag)
+            tag = None
         if tag is not None:
             tags.append(tag)
     return tags
