@@ -1,5 +1,6 @@
-# beautify_nodes.py
+# tag_beautify.py
 import re
+from urllib import parse
 
 # ====== 区域关键字 ======
 REGIONS = [
@@ -15,10 +16,13 @@ REGIONS = [
     {"keywords": ["ES", "Spain", "西班牙"], "zh": "西班牙"},
     {"keywords": ["MY", "Malaysia", "马来西亚", "马来", "馬來", "MALAYSIA", "KualaLumpur"], "zh": "马来西亚"},
     {"keywords": ["CN", "Turkey", "土耳其", "TUR"], "zh": "土耳其"},
+    {"keywords": ["AR", "Argentina", "阿根廷"], "zh": "阿根廷"},
+    {"keywords": ["CA", "Canada", "加拿大", "楓葉", "枫叶", "CAN", "CANADA"], "zh": "加拿大"},
+    {"keywords": ["DE", "德国", "德國"], "zh": "德国"},
 ]
 
 # ====== 节点美化类 ======
-class NodeBeautifier:
+class TagBeautifier:
     def __init__(self, regions=REGIONS):
         self.regions = regions
         self.counts = {}  # 每个地区编号计数
@@ -39,8 +43,8 @@ class NodeBeautifier:
             return "IEPL"
         elif "三网" in name_upper:
             return "三网"
-        elif "Home" in name_upper:
-            return "Home"
+        elif "HOME" in name_upper:
+            return "HOME"
         else:
             return ""  # 无线路类型则返回空
 
@@ -52,16 +56,17 @@ class NodeBeautifier:
         else:
             return "x1"  # 默认倍率
 
-    def beautify(self, node_name: str, subscription_name: str = '') -> str:
-        region = self._find_region(node_name)
+    def beautify(self, tag: str, subscription_name: str = '') -> str:
+        tag = parse.unquote(tag)
+        region = self._find_region(tag)
 
         if not region:
-            return f"{subscription_name} | {node_name}".strip(" |")
+            return f"{subscription_name} | {tag}".strip(" |")
         elif region["zh"] == '信息':
             return None
 
-        line_type = self._detect_line_type(node_name)
-        multiplier = self._detect_multiplier(node_name)
+        line_type = self._detect_line_type(tag)
+        multiplier = self._detect_multiplier(tag)
         region_name = region["zh"]
         self.counts[region_name] = self.counts.get(region_name, 0) + 1
         idx = f"{self.counts[region_name]:02d}"
@@ -71,11 +76,11 @@ class NodeBeautifier:
         return f"{subscription_name} | {region_name} {idx} | {right_part}".strip(" |")
 
 # ====== 模块级实例 ======
-_beautifier = NodeBeautifier()
+_beautifier = TagBeautifier()
 
-def beautify_nodes(node_name: str, subscription_name: str = '') -> str:
+def tag_beautifier(tag: str, subscription_name: str = '') -> str:
     """每次传入一个节点名与订阅名，返回美化后的节点名称"""
-    return _beautifier.beautify(node_name, subscription_name)
+    return _beautifier.beautify(tag, subscription_name)
 
 # ====== 示例 ======
 if __name__ == "__main__":
@@ -91,4 +96,4 @@ if __name__ == "__main__":
     ]
 
     for s in samples:
-        print(beautify_nodes(s, "A"))
+        print(tag_beautifier(s, "A"))
