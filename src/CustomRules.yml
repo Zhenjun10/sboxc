@@ -1,7 +1,10 @@
 reject:
-  - domain, genuine.adobe.com  # adobe
+  - domain, genuine.adobe.com   # adobe
 proxy:
   - domain_keyword, browserleaks
-  - domain, yinghe.xyz  # 硬核影视指南
+  - domain, yinghe.xyz          # 硬核影视指南
+  - domain, mikanani.me         # 蜜柑计划
+  - domain_keyword, themoviedb  # TMDB
 direct:
-  - domain, cheremace.xyz
+  - domain_keyword, cheremace
+  - domain, miluxing.com        # 新番列表

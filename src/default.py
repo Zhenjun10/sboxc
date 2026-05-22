@@ -15,7 +15,7 @@ config = {
       "external_ui": "./ui",
       "external_ui_download_url": "",  # git clone https://github.com/metacubex/metacubexd.git -b gh-pages ui
       "external_ui_download_detour": "DIRECT",
-      "secret": "ID_7oqrfbpd",
+      "secret": "LAk8yWcj#njTZ%QZ2a",
       "default_mode": "rule",
       "access_control_allow_origin": [
         "*"
@@ -32,35 +32,35 @@ config = {
     }
   },
   "inbounds": [
-    # {
-    #   "type": "mixed",
-    #   "tag": "mixed-in",
-    #   "listen": "127.0.0.1",
-    #   "listen_port": 20122,
-    #   "tcp_fast_open": False,
-    #   "tcp_multi_path": False,
-    #   "udp_fragment": False
-    # },
     {
-      "type": "tun",
-      "tag": "tun-in",
-      "interface_name": "",
-      "address": [
-        "192.168.255.252/30"
-      ],
-      "mtu": 9000,
-      "auto_route": True,
-      "strict_route": True,
-      "endpoint_independent_nat": False,
-      "stack": "mixed",
-      "platform": {
-        "http_proxy": {
-          "enabled": True,
-          "server": "127.0.0.1",
-          "server_port": 20122
-        }
-      }
-    }
+      "type": "mixed",
+      "tag": "mixed-in",
+      "listen": "0.0.0.0",
+      "listen_port": 21765,
+      "tcp_fast_open": False,
+      "tcp_multi_path": False,
+      "udp_fragment": False
+    },
+    # {
+    #   "type": "tun",
+    #   "tag": "tun-in",
+    #   "interface_name": "",
+    #   "address": [
+    #     "192.168.255.252/30"
+    #   ],
+    #   "mtu": 1350,
+    #   "auto_route": True,
+    #   "strict_route": True,
+    #   "endpoint_independent_nat": False,
+    #   "stack": "system",
+    #   "platform": {
+    #     "http_proxy": {
+    #       "enabled": True,
+    #       "server": "127.0.0.1",
+    #       "server_port": 20122
+    #     }
+    #   }
+    # }
   ],
   "outbounds": [
     {
@@ -98,7 +98,7 @@ config = {
     "rules": [
       {
         "action": "sniff",
-        "inbound": "tun-in"
+        "inbound": "mixed-in"
       },
       {
         "action": "hijack-dns",

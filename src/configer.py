@@ -1,7 +1,7 @@
 import json
-import tools
+import utils
 from default import config
-from proxy_parse import ProxyParser
+from proxies import ProxyParser
 
 
 class Configer:
@@ -22,12 +22,13 @@ class Configer:
         @param flag: 标识`param`的类型, 可填`url`, `stream`
         """
         if flag == "url":
-            stream = tools.get_proxies(param)
+            stream = utils.get_proxies(param)
         elif flag == "stream":
             stream = param
         parser = ProxyParser(stream)
         self.outbounds.extend(parser.proxies)
         self.manaul_select.extend(parser.tags)
+        self.manaul_select.sort()
         self.auto_select.extend(parser.tags)
 
     def save_config(self, filename: str = "build/config.json"):
@@ -67,4 +68,4 @@ class Configer:
     def add_rules(self):
         with open("src/CustomRules.yml", mode="r", encoding="utf-8") as f:
             stream = f.read()
-        tools.parse_rules(self.rule_set, stream)
+        utils.parse_rules(self.rule_set, stream)

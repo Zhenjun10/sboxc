@@ -4,7 +4,7 @@ from urllib import parse
 
 # ====== 区域关键字 ======
 REGIONS = [
-    {"keywords": ["流量", "套餐到期", "重置", "剩余"], "zh": "信息"},
+    {"keywords": ["剩余", "流量", "到期", "过期", "免费"], "zh": "信息"},
     {"keywords": ["HK", "Hong Kong", "香港"], "zh": "香港"},
     {"keywords": ["JP", "Japan", "日本", "Tokyo", "Osaka"], "zh": "日本"},
     {"keywords": ["SG", "Singapore", "新加坡"], "zh": "新加坡"},
@@ -19,6 +19,11 @@ REGIONS = [
     {"keywords": ["AR", "Argentina", "阿根廷"], "zh": "阿根廷"},
     {"keywords": ["CA", "Canada", "加拿大", "楓葉", "枫叶", "CAN", "CANADA"], "zh": "加拿大"},
     {"keywords": ["DE", "德国", "德國"], "zh": "德国"},
+    {"keywords": ["RU", "俄罗斯", "俄羅斯", "俄国", "俄國"], "zh": "俄罗斯"},
+    {"keywords": ["IN", "印度", "India", "IND", "INDIA"], "zh": "印度"},
+    {"keywords": ["AU", "澳大利亚", "Australia", "澳洲", "Sydney"], "zh": "澳大利亚"},
+    {"keywords": ["FR", "法国", "France", "法國", "巴黎"], "zh": "法国"},
+    {"keywords": ["UA", "乌克兰", "Ukraine", "烏克蘭", "基辅"], "zh": "乌克兰"},
 ]
 
 # ====== 节点美化类 ======
@@ -78,22 +83,6 @@ class TagBeautifier:
 # ====== 模块级实例 ======
 _beautifier = TagBeautifier()
 
-def tag_beautifier(tag: str, subscription_name: str = '') -> str:
+def beautitag(tag: str, subscription_name: str = '') -> str:
     """每次传入一个节点名与订阅名，返回美化后的节点名称"""
     return _beautifier.beautify(tag, subscription_name)
-
-# ====== 示例 ======
-if __name__ == "__main__":
-    samples = [
-        "🇭🇰HKBN_IEPL_01_x2",
-        "Japan_Tokyo_BGP01",
-        "SG_×3",
-        "KR_x1.5",
-        "US_LosAngeles",
-        "CN-Beijing-x4",
-        "Unknown_Node",
-        "ddddd"
-    ]
-
-    for s in samples:
-        print(tag_beautifier(s, "A"))
