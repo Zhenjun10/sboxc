@@ -1,4 +1,4 @@
-# tag_beautify.py
+# tag.py
 import re
 from urllib import parse
 
@@ -81,8 +81,8 @@ class TagBeautifier:
         return f"{subscription_name} | {region_name} {idx} | {right_part}".strip(" |")
 
 # ====== 模块级实例 ======
-_beautifier = TagBeautifier()
+_tag = TagBeautifier()
 
-def beautitag(tag: str, subscription_name: str = '') -> str:
+def tag_beautify(tag: str, subscription_name: str = '') -> str:
     """每次传入一个节点名与订阅名，返回美化后的节点名称"""
-    return _beautifier.beautify(tag, subscription_name)
+    return _tag.beautify(tag, subscription_name)

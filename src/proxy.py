@@ -1,7 +1,7 @@
 import json
 import re
 import utils
-from beautitag import beautitag
+from tag import tag_beautify
 
 
 class Proxy:
@@ -28,7 +28,7 @@ class SSProxy(Proxy):
     def v1(self):
         pattern = r"^(?P<mpwd>[\w-]+)@(?P<host>[\w.]+):(?P<port>\d+)#(?P<tag>.*?)$"
         ret = re.search(pattern, self.context).groupdict()
-        self.tag = beautitag(ret["tag"])
+        self.tag = tag_beautify(ret["tag"])
         self.host = ret["host"]
         self.port = int(ret["port"])
         self.method, self.passwd = utils.b64decode(ret["mpwd"]).split(":")
@@ -38,7 +38,7 @@ class SSProxy(Proxy):
         context, tag = self.context.split("#")
         context = utils.b64decode(context)
         ret = re.search(pattern, context).groupdict()
-        self.tag = beautitag(tag)
+        self.tag = tag_beautify(tag)
         self.host = ret["host"]
         self.port = int(ret["port"])
         self.method = ret["meth"]
@@ -83,7 +83,7 @@ class VmessProxy(Proxy):
 
     def v1(self):
         ret = json.loads(utils.b64decode(self.context))
-        self.tag = beautitag(ret["ps"])
+        self.tag = tag_beautify(ret["ps"])
         self.host = ret["add"]
         self.port = int(ret["port"])
         self.uuid = ret["id"]

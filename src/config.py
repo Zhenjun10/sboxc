@@ -1,15 +1,14 @@
 import json
 import utils
 from default import config
-from proxies import ProxyParser
+from proxy import ProxyParser
 
 
 class Configer:
     def __init__(self, param: str, flag: str = "url") -> None:
         """初始化
-
-        @param param: 参数, 可以是网址 (URL), 也可以是字符串 (stream)
-        @param flag: 标识`param`的类型, 可填`url`, `stream`
+        @param param 参数, 可以是网址 (URL), 也可以是字符串 (stream)
+        @param flag  标识param的类型, 可填url, stream
         """
         self.config = config
         self.add_proxies(param, flag)
@@ -17,9 +16,8 @@ class Configer:
 
     def add_proxies(self, param: str, flag: str = "url"):
         """给配置文件添加节点
-
-        @param param: 参数, 可以是网址 (URL), 也可以是字符串 (stream)
-        @param flag: 标识`param`的类型, 可填`url`, `stream`
+        @param param 参数, 可以是网址 (URL), 也可以是字符串 (stream)
+        @param flag  标识param的类型, 可填url, stream
         """
         if flag == "url":
             stream = utils.get_proxies(param)
@@ -32,10 +30,9 @@ class Configer:
         self.auto_select.extend(parser.tags)
 
     def save_config(self, filename: str = "build/config.json"):
-        """保存`config`文件
-
-        @param filename: 文件名，默认为 `build/config.json`
-        @return: 无
+        """保存config文件
+        @param filename 文件名, 默认为build/config.json
+        @return 无
         """
         json.dump(
             self.config,

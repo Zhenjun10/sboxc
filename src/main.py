@@ -1,4 +1,4 @@
-from configer import Configer
+from config import Configer
 
 
 with open('data/subscribe', 'r', encoding='utf-8') as f:
