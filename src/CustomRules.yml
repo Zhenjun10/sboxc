@@ -3,7 +3,6 @@ reject:
     - genuine.adobe.com   # adobe
 proxy:
   domain:
-    - yinghezhinan.com    # 硬核影视指南
     - mikanani.me         # 蜜柑计划
   domain_keyword:
     - browserleaks
@@ -11,5 +10,6 @@ proxy:
 direct:
   domain:
     - miluxing.com        # 新番列表
+    - yinghezhinan.com    # 硬核影视指南
   domain_keyword:
     - cheremace
