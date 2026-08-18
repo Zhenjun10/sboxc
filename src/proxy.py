@@ -104,13 +104,12 @@ class VmessProxy(Proxy):
 
 
 class ProxyParser:
-    def __init__(self, stream):
+    def __init__(self):
         self.proxies = []
         self.servers = []
         self.tags = []
-        self.proxy_parser(stream)
 
-    def proxy_parser(self, stream):
+    def parse(self, stream):
         lines = utils.b64decode(stream).split()
         for line in lines:
             proto, context = line.split("://")

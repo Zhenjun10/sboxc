@@ -5,46 +5,38 @@ from proxy import ProxyParser
 
 
 class Configer:
-    def __init__(self, param: str, flag: str = "url") -> None:
-        """初始化
-        @param param 参数, 可以是网址 (URL), 也可以是字符串 (stream)
-        @param flag  标识param的类型, 可填url, stream
-        """
+    def __init__(self) -> None:
         self.config = config
-        self.add_proxies(param, flag)
-        self.add_rules()
 
-    def add_proxies(self, param: str, flag: str = "url"):
+    def add_proxies(self):
         """给配置文件添加节点
-        @param param 参数, 可以是网址 (URL), 也可以是字符串 (stream)
-        @param flag  标识param的类型, 可填url, stream
+        @param stream 节点字符串
         """
-        if flag == "url":
-            stream = utils.get_proxies(param)
-        elif flag == "stream":
-            stream = param
-        parser = ProxyParser(stream)
+        text = self.get_sub_nodes()
+        parser = ProxyParser()
+        parser.parse(text)
         self.outbounds.extend(parser.proxies)
         self.manaul_select.extend(parser.tags)
         self.manaul_select.sort()
         self.auto_select.extend(parser.tags)
 
-    def save_config(self, filename: str = "build/config.json"):
+    def get_sub_nodes(self):
+        with open('data/subscribe', 'r', encoding='utf-8') as f:
+            url = f.read()
+        return utils.url_get(url)
+
+    def save_config(self, filename: str = "bin/config.json"):
         """保存config文件
-        @param filename 文件名, 默认为build/config.json
+        @param filename 文件名, 默认为bin/config.json
         @return 无
         """
         json.dump(
             self.config,
-            open(filename, "w+", encoding="utf-8"),
+            open(filename, "w", encoding="utf-8"),
             indent=2,
             ensure_ascii=False,
         )
         print("保存完成！")
-
-    @property
-    def inbounds(self):
-        return self.config["inbounds"]
 
     @property
     def outbounds(self):
@@ -57,12 +49,3 @@ class Configer:
     @property
     def auto_select(self):
         return self.config["outbounds"][1]["outbounds"]
-
-    @property
-    def rule_set(self):
-        return self.config["route"]["rule_set"]
-
-    def add_rules(self):
-        with open("src/CustomRules.yml", mode="r", encoding="utf-8") as f:
-            stream = f.read()
-        utils.parse_rules(self.rule_set, stream)

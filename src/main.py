@@ -1,8 +1,11 @@
 from config import Configer
+from rule import RuleSet
 
 
-with open('data/subscribe', 'r', encoding='utf-8') as f:
-    stream = f.read()
-
-cfg = Configer(stream, "url")
+cfg = Configer()
+cfg.add_proxies()
 cfg.save_config()
+
+ruleset = RuleSet()
+ruleset.get_custom_rules()
+ruleset.save_rule_set()

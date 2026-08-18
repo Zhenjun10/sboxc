@@ -121,7 +121,6 @@ config = {
       {
         "action": "reject",
         "rule_set": [
-          "Category-Ads",
           "Reject"
         ]
       },
@@ -129,10 +128,6 @@ config = {
         "action": "route",
         "outbound": "DIRECT",
         "rule_set": [
-          "GeoSite-Private",
-          "GeoSite-CN",
-          "GeoIP-Private",
-          "GeoIP-CN",
           "Direct"
         ]
       },
@@ -140,54 +135,26 @@ config = {
         "action": "route",
         "outbound": "手动选择",
         "rule_set": [
-          "GeoLocation-!CN",
           "Proxy"
         ]
       }
     ],
     "rule_set": [
       {
-        "tag": "Category-Ads",
-        "type": "remote",
-        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/category-ads-all.srs",
-        "format": "binary",
-        "download_detour": "DIRECT"
+        "tag": "Reject",
+        "type": "local",
+        "path": "./reject.srs"
       },
       {
-        "tag": "GeoIP-Private",
-        "type": "remote",
-        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geoip/private.srs",
-        "format": "binary",
-        "download_detour": "DIRECT"
+        "tag": "Direct",
+        "type": "local",
+        "path": "./direct.srs"
       },
       {
-        "tag": "GeoSite-Private",
-        "type": "remote",
-        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/private.srs",
-        "format": "binary",
-        "download_detour": "DIRECT"
+        "tag": "Proxy",
+        "type": "local",
+        "path": "./proxy.srs"
       },
-      {
-        "tag": "GeoIP-CN",
-        "type": "remote",
-        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geoip/cn.srs",
-        "format": "binary",
-        "download_detour": "DIRECT"
-      },
-      {
-        "tag": "GeoSite-CN",
-        "type": "remote",
-        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/cn.srs",
-        "format": "binary",
-        "download_detour": "DIRECT"
-      },
-      {
-        "tag": "GeoLocation-!CN",
-        "type": "remote",
-        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/geolocation-!cn.srs",
-        "format": "binary",
-        "download_detour": "DIRECT"
-      }
     ],
     "auto_detect_interface": True,
     "final": "手动选择",
@@ -240,7 +207,6 @@ config = {
       {
         "action": "route",
         "rule_set": [
-          "GeoSite-CN",
           "Direct"
         ],
         "server": "Local-DNS"
@@ -248,7 +214,6 @@ config = {
       {
         "action": "route",
         "rule_set": [
-          "GeoLocation-!CN",
           "Proxy"
         ],
         "server": "Remote-DNS"
